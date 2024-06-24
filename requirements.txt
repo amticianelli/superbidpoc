@@ -1,4 +1,5 @@
 openai==1.34.0
 pdf2image==1.17.0
+pdf2image==1.17.0
 google-cloud-aiplatform==1.55.0
 pandas==2.2.2
