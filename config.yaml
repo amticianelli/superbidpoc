@@ -1,0 +1,17 @@
+azopenaiGPT4Vision:
+  resource_name: "superbidvision"
+  endpoint: "https://openaiwestusalb.openai.azure.com"
+  token: "f3af149c7c724ff88c3bf54eb69d6381"
+  apiversion: "2024-02-15-preview"
+azopenaiGPT4o:
+  resource_name: "MODEL_NAME"
+  endpoint: "YOUR ENDPOINT"
+  token: "TOKEN"
+gcpvertex:
+  model_name: "MODEL_NAME"
+  keypath: "YOUR ENDPOINT"
+  project: "YOUR_MODEL_NAME"
+  location: " YOUR_LOCATION"
+anthropic:
+  model_name: "MODEL_NAME"
+  endpoint: "YOUR"

@@ -1,0 +1,15 @@
+azopenai:
+  - model_name: "YOUR_SUBSCRIPTION_KEY"
+  endpoint: "YOUR ENDPOINT"
+  token: "YOUR_MODEL_NAME"
+  - model_name: "YOUR_SUBSCRIPTION_KEY"
+  endpoint: "YOUR ENDPOINT"
+  token: "YOUR_MODEL_NAME"
+gcpvertex:
+  - model_name: "YOUR_SUBSCRIPTION_KEY"
+  keypath: "YOUR ENDPOINT"
+  project: "YOUR_MODEL_NAME"
+  location: " YOUR_LOCATION"
+anthropic:
+  - model_name: "YOUR_SUBSCRIPTION_KEY"
+  endpoint: "YOUR"

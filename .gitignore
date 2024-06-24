@@ -5,6 +5,7 @@ __pycache__/
 gcloud_key.json
 sample_data/*
 output_data/*
+.config.yaml
 
 # C extensions
 *.so
