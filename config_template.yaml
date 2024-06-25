@@ -1,15 +1,19 @@
-azopenai:
-  - model_name: "YOUR_SUBSCRIPTION_KEY"
-  endpoint: "YOUR ENDPOINT"
-  token: "YOUR_MODEL_NAME"
-  - model_name: "YOUR_SUBSCRIPTION_KEY"
-  endpoint: "YOUR ENDPOINT"
-  token: "YOUR_MODEL_NAME"
+azopenaiGPT4Vision:
+  resource_name: ""
+  endpoint: ""
+  token: ""
+  apiversion: ""
+azopenaiGPT4o:
+  resource_name: ""
+  endpoint: ""
+  token: ""
+  apiversion: ""
 gcpvertex:
-  - model_name: "YOUR_SUBSCRIPTION_KEY"
-  keypath: "YOUR ENDPOINT"
-  project: "YOUR_MODEL_NAME"
-  location: " YOUR_LOCATION"
+  model_name: ""
+  keypath: ""
+  project: ""
+  location: ""
 anthropic:
-  - model_name: "YOUR_SUBSCRIPTION_KEY"
-  endpoint: "YOUR"
+  name: ""
+  model_name: ""
+  token: ""
