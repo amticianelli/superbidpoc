@@ -1,5 +1,6 @@
 # Business case
-* Automate invoinces validation by using LLM
+* Automate invoice validation by using LLM for OCR extraction
+* Once the data is extracted, call external functions to enhance the data and validate the company
 * Document Intelligence and Custom Vision are not having a good result when checking random invoices
 
 ![Image Description](https://github.com/amticianelli/superbidpoc/blob/main/img/image.png)
