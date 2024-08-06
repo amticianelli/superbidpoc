@@ -1,3 +1,9 @@
+# Business case
+* Automate invoinces validation by using LLM
+* Document Intelligence and Custom Vision are not having a good result when checking random invoices
+
+![Image Description](https://github.com/amticianelli/AzureOAIProjectChallenge/blob/main/img/image.png)
+
 # Points of improvement
 * Add parallellism using asyncio/httpx instead of requests
 * Add AAD authentication if available
@@ -11,16 +17,17 @@
 
 ### Disadvantages
 * Only 2 SDKs (Python and Typescript)
-* Lacking topic discussions on the Internet
+* Lacking topic of discussions on the Internet
 
 ## Google Gemini
 ### Perks
 * Easy to use
-* They manufactur their own chips (easier to scale) up
+* They manufacture their own chips (easier to scale up) 
+* Creators of Transformers and self-attention approach
 
 ### Disadvantages
-* Lacking topic discussions on the Internet
-* System instruction not supported for vision (???)
+* Lacking topic of discussions on the Internet
+* System instructions not supported for vision (???)
 
 
 ## Microsoft Open AI
@@ -28,7 +35,7 @@
 * More material on the internet (StackOverflow, Medium and other sources)
 * Have integrated options like "Add you own data"
 * CSS of Microsoft is the best on the planet
-* Extra layer of security among API for the rest of the environment
+* Extra layer of security among APIs for the rest of the environment
 * Pioneer in the LLM area (together with Open AI)
 
 ### Disadvantages
@@ -44,8 +51,7 @@
 | 2       |  `2nd`    | `2nd` | `4th`  | `1st`  |
 | 3       |  `2nd`    | `2nd` | `1st`  | `2nd`  |
 | 4       |  `3rd`    | `1st` |        | `1st`  |
-| 5       |           | `1st` |        | `1st`  |
-| 6       |  `2nd`    | `1st` | `2nd`  | `1st`  |
+| 5       |  `1st`    | `4th` | `1st`  | `4th`  |
 
 ## Time to process all invoices
 |            |       |
