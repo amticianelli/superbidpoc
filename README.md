@@ -2,7 +2,7 @@
 * Automate invoinces validation by using LLM
 * Document Intelligence and Custom Vision are not having a good result when checking random invoices
 
-![Image Description](https://github.com/amticianelli/AzureOAIProjectChallenge/blob/main/img/image.png)
+![Image Description](https://github.com/amticianelli/superbidpoc/blob/main/img/image.png)
 
 # Points of improvement
 * Add parallellism using asyncio/httpx instead of requests
