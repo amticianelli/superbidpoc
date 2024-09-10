@@ -1,10 +1,12 @@
 from fastapi import APIRouter, UploadFile
-from pdf2image import convert_from_path
+from pdf2image import convert_from_bytes
 from openai import AzureOpenAI
 import os
 import base64
 import json
-
+import requests
+from PIL import Image
+import io
 
 router = APIRouter(
     prefix="/openai",
@@ -12,7 +14,8 @@ router = APIRouter(
     #responses={}
 )
 
-
+API_BASE = os.getenv("AZURE_OPENAI_ENDPOINT")
+API_KEY= os.getenv("AZURE_OPENAI_API_KEY")
 
 ###
 # How does it work
@@ -24,19 +27,15 @@ router = APIRouter(
 # Aux methods
 def pdfToImage(files: list[UploadFile]):
     invoices: list[dict]= []
+
     for file in files:
-        print(file)
-        fileName = file.split(".")[0]
-        invoiceImage = convert_from_path('sample_data/'+file, 400)
+        invoices.append({
+           "filename": file.filename,
+           "image": convert_from_bytes(file.read())
+           })
 
         # Save pages as images in the pdf
-        fileOutputPath = f'output_data/{fileName}.jpg'
-        invoiceImage[0].save(fileOutputPath, 'JPEG')
-
-        invoices.append({
-            "fileName":fileName,
-            "path": fileOutputPath
-        })
+        
 
     return invoices
 
@@ -73,15 +72,24 @@ def getCNPJStatus(CNPJ: str):
   return json.dumps(finalResult)
 
 def azopaiRequest(fileInfo: dict):
-    api_base = os.getenv("AZURE_OPENAI_ENDPOINT")
-    api_key= os.getenv("AZURE_OPENAI_API_KEY")
+
+    fileName: str = fileInfo["filename"]
+    image: Image.Image = fileInfo["image"]
+
+    imgByteArr = io.BytesIO()
+    image.save(imgByteArr, format='PNG')
+
+    encoded_image = base64.b64encode(imgByteArr).decode('ascii')
+    
     deployment_name = '<your_deployment_name>'
     api_version = '2023-12-01-preview' # this might change in the future
 
     client = AzureOpenAI(
-        api_key=api_key,  
+        api_key=API_KEY,  
         api_version=api_version,
-        base_url=f"{api_base}/openai/deployments/{deployment_name}"
+        base_url=f"{API_BASE}/openai/deployments/{deployment_name}",
+        max_retries=3,
+        timeout=60
     )
 
     response = client.chat.completions.create(
@@ -96,12 +104,12 @@ def azopaiRequest(fileInfo: dict):
                 { 
                     "type": "image_url",
                     "image_url": {
-                        "url": "<image URL>"
+                        "url": f"data:image/jpeg;base64,{encoded_image}"
                     }
                 }
             ] } 
         ],
-        max_tokens=2000 
+        max_tokens=4096 
     )
 
     print(response)
