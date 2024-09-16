@@ -6,6 +6,7 @@ gcloud_key.json
 sample_data/*
 output_data/*
 config.yaml
+setLogonEnv.sh
 
 # C extensions
 *.so
