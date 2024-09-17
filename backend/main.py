@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from routers import openaiInteraction
 from fastapi.middleware import Middleware
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
 
@@ -22,3 +23,6 @@ app = FastAPI()
 # To start 
 # python -m uvicorn main:app --reload --port 80
 app.include_router(openaiInteraction.router)
+
+# Mounting frontend
+app.mount("/", StaticFiles(directory="static"), name="static")
