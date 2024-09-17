@@ -58,45 +58,48 @@ def pdfToImage(files: list[UploadFile]):
 
     return invoices
 
-def getCNPJStatus(CNPJ: str):
-  CNPJ = CNPJ.replace('.','').replace('-','').replace('/','')
-  print(f'Looking for {CNPJ}')
-  data = requests.get(f"https://publica.cnpj.ws/cnpj/{CNPJ}")
-  print(f"Checking {CNPJ}")
-
-  data = json.loads(data.text)
-
-  # Checking if tag estabelecimento exists
-  if 'estabelecimento' in data:
-    print(data)
-
-    finalResult: dict = {
-        "situacao": data['estabelecimento']['situacao_cadastral'],
-        "tipoempresa": data['simples']
-    }
-
-    if finalResult['tipoempresa'] is None:
-      finalResult['tipoempresa'] = 'Lucro presumido'
-    else:
-      if finalResult['tipoempresa']['simples'] == 'Sim':
-        finalResult['tipoempresa'] = 'Simples nacional'
-      else:
-        finalResult['tipoempresa'] = 'MEI'
-  else:
-    finalResult = {
-        "situacao": "429 Throttling",
-        "tipoempresa": "429 Throttling"
-    }
-
-  return json.dumps(finalResult)
 
 def getCompanyStatus(CNPJ: str):
+
+    CNPJ = CNPJ \
+            .replace('.','')\
+            .replace('-','')\
+            .replace('/','')
+
+    finalResult: dict = {
+        "situacao": None,
+        "tipoempresa": None
+    }
    
     # https://cnpja.com/api
-   response = requests.get(
+    response = requests.get(
       url=f'{BRGOV_ENDPOINT}/{CNPJ}?simples=true',
       headers={'Authorization': BRGOV_API_KEY}
       )
+    
+    if response.status_code == 200:
+        companyData: dict = json.loads(response.text)
+
+        if companyData['company']['simei']['optant'] == True:
+            finalResult['tipoempresa'] = 'MEI'
+        elif 'simples' in companyData['company'] and companyData['company']['simples']['optant'] == True:
+            finalResult['tipoempresa'] = 'Simples nacional'
+        else:
+            finalResult['tipoempresa'] = 'Lucro presumido'
+
+
+        finalResult['situacao'] = companyData['status']['text']
+
+    else:
+       return { 
+          'Error': {response.status_code},
+          'Response':  {response.text}
+          }
+    
+    return finalResult
+   
+
+
 
 def azopaiRequest(fileInfo: dict):
 
@@ -154,9 +157,18 @@ def azopaiRequest(fileInfo: dict):
 
     
 
-    #print(response)
+    invoiceData: dict = json.loads(response.choices[0].message.content)
 
-    return json.loads(response.choices[0].message.content)
+    if invoiceData is not None:
+        if 'prestador' in invoiceData:
+            checkCompany: dict = getCompanyStatus(invoiceData['prestador']['cpf_cnpj'])
+
+            if 'Error' not in checkCompany:
+
+                print(checkCompany)
+                invoiceData['situacao'], invoiceData['tipo_empresa'] = checkCompany['situacao'],checkCompany['tipoempresa']
+
+    return invoiceData
 
 
 
@@ -170,6 +182,8 @@ def convertInvoice(files: list[UploadFile]):
 
     for file in listFiles:
         responseList.append(azopaiRequest(file)) 
+
+    
 
     return responseList
 

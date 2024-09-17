@@ -19,4 +19,6 @@ app = FastAPI()
 #)
 
 # Adding routers
+# To start 
+# python -m uvicorn main:app --reload --port 80
 app.include_router(openaiInteraction.router)
