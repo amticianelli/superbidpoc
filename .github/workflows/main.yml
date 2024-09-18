@@ -8,23 +8,15 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Azure CLI
-        uses: azure/actions/setup-azure@v1
+    steps:   
+      - name: ACR build
+        id: acr
+        uses: azure/acr-build@v1
         with:
-          azcli-version: '2.32.0' # Adjust as needed
-
-      - name: Authenticate to ACR using access keys
-        run: |
-          az acr login --name ailabsms --username ${{ env.ACR_LOGON }} --password ${{ secrets.ACR_PASSWD }}
-
-      - name: Build the image
-        run: |
-          docker build -t ailabsms.azurecr.io/superbidpoc/mainapp:latest .
-
-      - name: Push the image to ACR
-        run: |
-          docker push ailabsms.azurecr.io/superbidpoc/mainapp:latest
+          service_principal: ${{ env.ACR_LOGON }}
+          service_principal_password: ${{ secrets.ACR_PASSWD }}
+          tenant: ${{ env.ACR_TENANT }}
+          registry: ${{ env.ACR_REGISTRY }}
+          repository: ${{ env.ACR_REPO }}
+          image: ${{ env.ACR_IMAGE }}
+          dockerfile: ../../Dockerfile

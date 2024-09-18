@@ -1,4 +1,5 @@
-from fastapi import APIRouter, UploadFile
+from fastapi import APIRouter, UploadFile, FastAPI, Depends, HTTPException, status
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from pdf2image import convert_from_bytes
 from openai import AzureOpenAI
 import os
@@ -16,6 +17,8 @@ router = APIRouter(
     #responses={}
 )
 
+security = HTTPBasic()
+
 # Setting auth credentials
 API_BASE = os.getenv("AZURE_OPENAI_ENDPOINT")
 API_KEY= os.getenv("AZURE_OPENAI_API_KEY")
@@ -24,12 +27,26 @@ DEPLOYMENT_NAME= os.getenv("MODEL_NAME")
 BRGOV_API_KEY = os.getenv("BRGOV_API_KEY")
 BRGOV_ENDPOINT = os.getenv("BRGOV_ENDPOINT")
 
+PREDEFINED_SECRET = os.getenv("PREDEFINED_SECRET")
+
 # Obtaining prompts
 with open("prompt.yaml", 'r') as stream:
     try:
         PROMPT_CONF = yaml.safe_load(stream)
     except yaml.YAMLError as exc:
         print(exc)
+
+## Check credentials
+def verify_credentials(credentials: HTTPBasicCredentials = Depends(security)):
+    correct_username = credentials.username == "admin"
+    correct_password = credentials.password == PREDEFINED_SECRET
+    if not (correct_username and correct_password):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Basic"},
+        )
+    return credentials.username
 
 
 ###
@@ -99,8 +116,6 @@ def getCompanyStatus(CNPJ: str):
     return finalResult
    
 
-
-
 def azopaiRequest(fileInfo: dict):
 
     fileName: str = fileInfo["filename"]
@@ -152,7 +167,8 @@ def azopaiRequest(fileInfo: dict):
                 }
             ] } 
         ],
-        max_tokens=4096 
+        max_tokens=4096,
+        temperature=0.0
     )
 
     
@@ -174,7 +190,10 @@ def azopaiRequest(fileInfo: dict):
 
 
 @router.post("/convertInvoice")
-def convertInvoice(files: list[UploadFile]):
+def convertInvoice(files: list[UploadFile], user: str = Depends(verify_credentials)):
+    
+    print(f'User: {user}')
+    
     listFiles: list[dict] = [] # PDF List
     listFiles = pdfToImage(files=files)
 
