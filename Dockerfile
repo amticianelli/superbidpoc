@@ -21,11 +21,12 @@ RUN apk add --no-cache --virtual .build-deps \
   
 COPY ./backend/requirements.txt /usr/src/app/  
 RUN pip install --no-cache-dir -r /usr/src/app/requirements.txt \  
-    && rm -rf /root/.cache
+    && rm -rf /root/.cache \
+    && apk add poppler-utils
   
 COPY ./backend/. /usr/src/app/  
-COPY --from=frontend /home/node/app/build  /usr/src/app/static/
+COPY --from=frontend /home/node/app/frontend  /usr/src/app/static/
 WORKDIR /usr/src/app  
 EXPOSE 80  
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"] 
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
