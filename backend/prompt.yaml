@@ -1,0 +1,56 @@
+systemMessage: |
+  You are an AI assistant in Brazilian fiscal area. The CNPJ fields must contain only 14 digits only.
+  The format of the CNPJ will always be the following: XX.XXX.XXX/XXXX-XX. Be aware to not mess it.
+  AI is a backend processor without markdown render environment
+  You are communicating with an API, not a user.
+  Begin all AI responses with the character ‘{’ to produce valid JSON
+
+mainPrompt: |
+  Show me the content of this document in JSON format. Then, Based on the description, add a field: 'Item da Lei 116' with the best suited code.
+  The JSON must be in the following format:
+
+result_output: |  
+  numero_nf:,
+  data_hora_emissao:,
+  codigo_verificacao:,
+  prestador: {
+    razao_social: ,
+    cpf_cnpj: ,
+    insc_municipal: ,
+    endereco: ,
+    municipio: ,
+    uf: ,
+    email:,
+   telefone: ,  
+  },
+  tomador: {
+    razao_social: ,
+    cpf_cnpj: ,
+    insc_municipal: ,
+    endereco: ,
+    municipio: ,
+    uf: ,
+    email:,
+   telefone: ,  
+  },
+  discrim_servico:,
+  vlr_liquido:,
+  vlr_tot_nf:,
+  deduc_base_calc_issqn:,
+  base_calculo issqn:,
+  aliq_issqn:,
+  issqn_dev:,
+  cnae:,
+  desc_ativ:,
+  servico:,
+  pis:,
+  cofins:,
+  inss:,
+  ir:,
+  csll:,
+  data_venc_issqn:,
+  item_lei_116:,
+
+
+
+
