@@ -19,7 +19,7 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "pip3 install --user -r requirements.txt && apt update && apt install -y poppler-utils && curl -fsSL https://fnm.vercel.app/install | bash && fnm use --install-if-missing 20",
+	"postCreateCommand": "pip3 install --user -r requirements.txt && apt update && apt install -y poppler-utils && curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && sudo apt install nodejs",
 
 	// Configure tool-specific properties.
 	// "customizations": {},

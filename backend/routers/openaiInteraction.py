@@ -50,7 +50,7 @@ def pdfToImage(files: list[UploadFile]):
 
         invoices.append({
            "filename": coroutine.filename,
-           "image": convert_from_bytes(pdf_file=contentBytes)
+           "image": convert_from_bytes(pdf_file=contentBytes,dpi=400, grayscale=True, jpegopt={'quality': 100})
            })
 
         # Save pages as images in the pdf
@@ -115,7 +115,7 @@ def azopaiRequest(fileInfo: dict):
     image.save(imgByteArr, format='PNG')
 
     # DEBUG
-    #image.save(f'./{fileName}'.replace('pdf','png')) # DEBUG
+    image.save(f'./{fileName}'.replace('pdf','jpeg')) # DEBUG
 
     print(f'File to be processed: {fileName}, size: {imgByteArr.getbuffer().nbytes}')
        
@@ -164,10 +164,10 @@ def azopaiRequest(fileInfo: dict):
             checkCompany: dict = getCompanyStatus(invoiceData['prestador']['cpf_cnpj'])
 
             if 'Error' not in checkCompany:
-
                 print(checkCompany)
                 invoiceData['situacao'], invoiceData['tipo_empresa'] = checkCompany['situacao'],checkCompany['tipoempresa']
-
+            else:
+                 print(checkCompany)
     return invoiceData
 
 

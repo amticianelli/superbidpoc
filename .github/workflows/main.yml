@@ -1,0 +1,30 @@
+name: Build and Deploy to ACR
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Azure CLI
+        uses: azure/actions/setup-azure@v1
+        with:
+          azcli-version: '2.32.0' # Adjust as needed
+
+      - name: Authenticate to ACR using access keys
+        run: |
+          az acr login --name ailabsms --username ${{ env.ACR_LOGON }} --password ${{ secrets.ACR_PASSWD }}
+
+      - name: Build the image
+        run: |
+          docker build -t ailabsms.azurecr.io/superbidpoc/mainapp:latest .
+
+      - name: Push the image to ACR
+        run: |
+          docker push ailabsms.azurecr.io/superbidpoc/mainapp:latest

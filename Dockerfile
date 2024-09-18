@@ -10,19 +10,16 @@ COPY --chown=node:node ./frontend/ ./frontend
 WORKDIR /home/node/app/frontend
 RUN NODE_OPTIONS=--max_old_space_size=8192 npm run build
   
-FROM python:3.12-alpine 
-RUN apk add --no-cache --virtual .build-deps \  
-    build-base \  
-    libffi-dev \  
-    openssl-dev \  
-    curl \  
-    && apk add --no-cache \  
-    libpq 
+#FROM python:3.12-alpine 
+FROM mcr.microsoft.com/devcontainers/python:1-3.12-bullseye
   
 COPY ./backend/requirements.txt /usr/src/app/  
 RUN pip install --no-cache-dir -r /usr/src/app/requirements.txt \  
     && rm -rf /root/.cache \
-    && apk add poppler-utils
+    && apt update \
+    && apt install -y poppler-utils
+    #&& apk add poppler-utils
+    
   
 COPY ./backend/. /usr/src/app/  
 COPY --from=frontend /home/node/app/frontend  /usr/src/app/static/
