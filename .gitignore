@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 gcloud_key.json
+backend/gcloud_key.json
 sample_data/*
 output_data/*
 config.yaml
